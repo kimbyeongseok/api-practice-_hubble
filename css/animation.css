@@ -1,0 +1,71 @@
+/* main section animation style */
+@keyframes slogan_effect {
+  0% {
+    opacity: 0;
+    right: -100px;
+  }
+  100% {
+    opacity: 1;
+    right: 0;
+  }
+}
+@keyframes img_effect {
+  0% {
+    transform: translateY(40%);
+    opacity: 0;
+    right: 0;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+    right: 0;
+  }
+  100% {
+    transform: translateY(-100px, 0);
+    opacity: 1;
+    right: 10%;
+  }
+}
+@keyframes txt_desc_effect {
+  0% {
+    opacity: 0;
+    right: 150px;
+  }
+  100% {
+    opacity: 1;
+    right: 0;
+  }
+}
+/* end of main section animation style */
+/* about panel animation fade up effect*/
+@keyframes fadeUp-1 {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeUp-2 {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* end of about panel animation fade up effect*/
+
+/* images page main image animation */
+@keyframes imgScale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.04);
+  }
+}
