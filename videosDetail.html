@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubble Space Project</title>
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="icon" href="images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="16x16" href="images/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/media.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="on">
+        <div class="center clear">
+          <h2 class="logo">
+            <a href="index.html">
+              <img src="images/logo_black.png" alt="logo" />
+            </a>
+          </h2>
+          <ul class="gnb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About Hubble</a></li>
+            <li><a href="images.html">Space Images</a></li>
+            <li><a href="videos.html">Videos</a></li>
+            <li class="lastPage"><a href="news.html">News</a></li>
+            <span></span>
+          </ul>
+          <div class="menuBtn">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </header>
+      <section class="vidDetail section">
+        <div class="center">
+          <div class="secTit">
+            <!-- data from api -->
+          </div>
+          <div class="vidDetailBox">
+            <!-- data from api -->
+          </div>
+          <div class="detailBtns">
+            <a href="#" class="prev"
+              ><i class="fa fa-angle-left"></i><em>Preview</em>
+            </a>
+            <a href="videos.html" class="viewLink">View All Videos</a>
+            <a href="#" class="next"
+              ><em>Next</em> <i class="fa fa-angle-right"></i
+            ></a>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <div class="center">
+          <p>
+            All contents are from NASA, hubblesite.org. if you want to see more
+            and detailed contents, visit ||
+            <a href="http://www.hubblesite.org" target="_blank"
+              >www.hubblesite.org</a
+            >
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?v=<?php echo time(); ?>"></script>
+    <script src="js/subHeader.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      $(document).ready(function () {
+        var locaNum = $(location).attr("href").split("=").reverse()[0];
+        var nLocaNum = Number(locaNum);
+        var vidTitleCon = [];
+        var vidCon = [];
+        function getVideos(count) {
+          $.ajax({
+            url: "http://hubblesite.org/api/v3/video/" + count,
+            dataType: "jsonp",
+            success: function (data) {
+              //   console.log(data);
+              vidTitleCon = `<h1>${data.name}</h1>
+                            <h3>About Clip : ${data.short_description}</h3>
+                            <p>Credits : ${data.credits}</p>
+                            <p>Collection : ${data.collection}</p>
+                            <p>
+                            <a href="https://www.youtube.com/watch?v=${data.youtube_id}" class="youtube" target="_blank">YouTube link</a>
+                            </p>`;
+              vidCon = `<video muted autoplay controls playsinline loop>
+                <source src="http:${data.video_files[0].file_url}" type="video/mp4" />
+                </video>`;
+
+              $(".secTit").append(vidTitleCon);
+              $(".vidDetailBox").append(vidCon);
+            },
+          });
+        }
+        getVideos(nLocaNum);
+
+        $(".detailBtns a").click(function () {
+          if ($(this).hasClass("prev")) {
+            if (nLocaNum === 1) {
+              return false;
+            } else {
+              location.replace("videosDetail.html?num=" + (nLocaNum - 1));
+            }
+          } else if ($(this).hasClass("next")) {
+            location.replace("videosDetail.html?num=" + (nLocaNum + 1));
+          }
+        });
+        if (nLocaNum === 40) {
+          $(".next").text("Visit Hubble Site");
+          $(".next").attr("href", "http://www.hubblesite.org");
+        }
+      });
+    </script>
+  </body>
+</html>

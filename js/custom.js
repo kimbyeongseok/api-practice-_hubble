@@ -9,6 +9,22 @@ $(document).ready(function () {
     });
   };
   fitHeight();
+  //   menuBtn click event function
+  $(".menuBtn").click(function () {
+    $(this).toggleClass("on");
+    if ($(this).hasClass("on")) {
+      $("header .gnb").animate({ right: 0 }, 400);
+    } else {
+      $("header .gnb").animate({ right: "-100%" }, 400);
+    }
+    if ($("header").hasClass("on")) {
+      if ($(this).hasClass("on")) {
+        $(this).find("div").css("background", "#fff");
+      } else {
+        $(this).find("div").css("background", "black");
+      }
+    }
+  });
 
   //   about section tabs function
   $(".aboutTab .tab, .mobileTab button").click(function () {

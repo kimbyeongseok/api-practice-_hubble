@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubble Space Project</title>
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="icon" href="images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="16x16" href="images/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/media.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="on">
+        <div class="center clear">
+          <h2 class="logo">
+            <a href="index.html">
+              <img src="images/logo_black.png" alt="logo" />
+            </a>
+          </h2>
+          <ul class="gnb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About Hubble</a></li>
+            <li><a href="images.html">Space Images</a></li>
+            <li><a href="videos.html">Videos</a></li>
+            <li class="lastPage"><a href="news.html">News</a></li>
+            <span></span>
+          </ul>
+          <div class="menuBtn">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </header>
+      <section class="newsPage">
+        <!-- data from api -->
+      </section>
+      <section class="newsBox section">
+        <div class="center">
+          <div class="newsItems">
+            <!-- data from api -->
+          </div>
+          <div class="btnBox">
+            <button type="button" class="btn loadMore">Load More</button>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <div class="center">
+          <p>
+            All contents are from NASA, hubblesite.org. if you want to see more
+            and detailed contents, visit ||
+            <a href="http://www.hubblesite.org" target="_blank"
+              >www.hubblesite.org</a
+            >
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?v=<?php echo time(); ?>"></script>
+    <script src="js/subHeader.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      $(document).ready(function () {
+        //   reset variation
+        var getNewsMain = [];
+        var getNewsItems = [];
+        var getNewsCount = 83;
+        //   main page image auto height
+        var newsMainHeight = $(window).width() * 0.4;
+        $(".newsPage").height(newsMainHeight);
+        $(window).resize(function () {
+          var newsMainHeight = $(window).width() * 0.4;
+          $(".newsPage").height(newsMainHeight);
+        });
+
+        function getMainNews(count) {
+          $.ajax({
+            url:
+              "http://hubblesite.org/api/v3/external_feed/esa_feed?page=all&sort=pub_date",
+            dataType: "jsonp",
+            success: function (data) {
+              var newsTitle = data[79].title;
+              var newsDescription = data[79].description;
+              var newsDate = data[79].pub_date;
+              var newsImg = data[79].image;
+              var newsLink = data[79].link;
+              getNewsMain = `<img src="http:${newsImg}" alt="" />
+                            <div class="newsMainTxt">
+                            <h2 class="newsTitle">
+                                ${newsTitle}
+                            </h2>
+                            <p>
+                                ${newsDescription}
+                            </p>
+                            <em class="newsDate">${newsDate}</em>
+                            <a href="http:${newsLink}" class="newsLink">Visit Hubble Site</a>
+                            </div>`;
+              $(".newsPage").append(getNewsMain);
+            },
+          });
+        }
+        getMainNews(79);
+
+        function getNews(count) {
+          $.ajax({
+            url:
+              "http://hubblesite.org/api/v3/external_feed/esa_feed?page=all&sort=pub_date",
+            dataType: "jsonp",
+            success: function (data) {
+              var newsTitle = data[count].title;
+              var newsDescription = data[count].description;
+              var newsDate = data[count].pub_date;
+              var newsThumb = data[count].thumbnail;
+              var newsLink = data[count].link;
+              getNewsItems = `<div class="newsItem clear">
+                                <div>
+                                <div class="flexOffset">
+                                    <div class="newsImg">
+                                    <img src="http:${newsThumb}" alt="" />
+                                    </div>
+                                    <div class="newsItemTxt">
+                                    <h2>
+                                        ${newsTitle}
+                                    </h2>
+                                    <p>
+                                        ${newsDescription}
+                                    </p>
+                                    <em>${newsDate}</em>
+                                    <a href="${newsLink}" class="newsLink" target="_blank">
+                                        View Details
+                                    </a>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>`;
+              getNewsItems = $(".newsItems").append(getNewsItems);
+            },
+          });
+        }
+        for (var i = 87; i >= getNewsCount; i--) {
+          getNews(i);
+          $(".loadMore").click(function () {
+            getNewsCount--;
+            getNews(getNewsCount);
+            if (getNewsCount <= 30) {
+              $(".btnBox").html(
+                '<a href="http://www.hubblesite.org" class="btn" target="_blank">Visit Hubble Site</a>'
+              );
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

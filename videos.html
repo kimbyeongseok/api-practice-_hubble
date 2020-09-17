@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="icon" href="images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="16x16" href="images/favicon.ico" />
+    <title>Hubble Space Clip</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/media.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="on">
+        <div class="center clear">
+          <h2 class="logo">
+            <a href="index.html">
+              <img src="images/logo_black.png" alt="logo" />
+            </a>
+          </h2>
+          <ul class="gnb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About Hubble</a></li>
+            <li><a href="images.html">Space Images</a></li>
+            <li><a href="videos.html">Videos</a></li>
+            <li class="lastPage"><a href="news.html">News</a></li>
+            <span></span>
+          </ul>
+          <div class="menuBtn">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </header>
+      <section class="vidMain">
+        <!-- data from api -->
+      </section>
+      <div class="titleLine">
+        <h3>
+          vital research tool and as a public relations boon for astronomy.
+        </h3>
+      </div>
+      <section class="vidPage section">
+        <div class="center vidItems clear">
+          <!-- data from api -->
+        </div>
+        <div class="loadMoreBox">
+          <a href="#" class="loadMore">Load More</a>
+        </div>
+      </section>
+      <footer>
+        <div class="center">
+          <p>
+            All contents are from NASA, hubblesite.org. if you want to see more
+            and detailed contents, visit ||
+            <a href="http://www.hubblesite.org" target="_blank"
+              >www.hubblesite.org</a
+            >
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?v=<?php echo time(); ?>"></script>
+    <script src="js/subHeader.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      $(document).ready(function () {
+        var loca = $(location).attr("href");
+        var vidMain = [];
+        var vidItems = [];
+        var getCount = 9;
+        $.ajax({
+          url: "http://hubblesite.org/api/v3/video/1",
+          dataType: "jsonp",
+          success: function (data) {
+            vidMain = `<video muted autoplay controls playsInline loop>
+                <source src="http:${data.video_files[0].file_url}" />
+              </video>`;
+
+            $(".vidMain").append(vidMain);
+          },
+        });
+        function getVideos(count) {
+          $.ajax({
+            url: "http://hubblesite.org/api/v3/video/" + count,
+            dataType: "jsonp",
+            success: function (data) {
+              vidItems = `<div class="vidItem">
+                  <div>
+                    <div class="vidBox">
+                      <img src="http:${data.image}" alt="" />
+                      <a href="videosDetail.html?num=${count}"><i class="fa fa-youtube-play"></i></a>
+                    </div>
+                    <div class="vidTxt">
+                      <p>${data.name}</p>
+                    </div>
+                    <div class="btnBox">
+                      <a href="videosDetail.html?num=${count}" class="btn">
+                        View This Clip
+                      </a>
+                    </div>
+                  </div>
+                </div>`;
+              $(".vidItems").append(vidItems);
+            },
+          });
+        }
+        for (var i = 1; i < getCount; i++) {
+          getVideos(i);
+          $(".loadMore").click(function (e) {
+            e.preventDefault();
+            getVideos(getCount);
+            getCount++;
+            if (getCount >= 40) {
+              $(".loadMoreBox").html(
+                '<a href="http://www.hubblesite.org" class="btn loadMore" target="_blank">Visit Hubble Site</a>'
+              );
+            }
+          });
+        }
+
+        if (loca.indexOf("vidoes")) {
+          var spanWid = $(".gnb li").eq(3).outerWidth();
+          var spanLeft = $(".gnb li").eq(3).position().left;
+          $(".gnb li").removeClass("active");
+          $(".gnb li").eq(3).addClass("active");
+          $(".gnb span").css({
+            width: spanWid,
+            left: spanLeft,
+          });
+        }
+        $(document).ajaxComplete(function () {
+          for (var i = 0; i < $(".vidItem").length; i++) {
+            var txtlen = $(".vidItem").eq(i).find("p").text();
+            var winWidth = $(window).width();
+            if (winWidth < 400) {
+              $(".vidItem").eq(i).find("p").text(txtlen.substr(0, 40));
+            }
+
+            if (txtlen == "undefined") {
+              $(".vidItem").eq(i).hide();
+            }
+          }
+        });
+        console.log(cutTxt);
+      });
+    </script>
+  </body>
+</html>

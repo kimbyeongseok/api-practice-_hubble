@@ -38,37 +38,18 @@
           </div>
         </div>
       </header>
-      <section class="imgMain">
-        <img src="images/imgMain.jpg" alt="" />
-        <div class="imgMainTxt">
-          <p>
-            One of the brightest nevulae visible to the naked eye <br />
-            in the night sky the performance takes audiences on a journey <br />
-            inside the Orion Nevula, <br />
-            located come 1.344 light years from Earth.
-          </p>
-          <h1>ORION NEVULA IN THE HUBBLE CANTATA</h1>
-          <a href="http://www.hubblesite.org">Visit Hubble Site</a>
-        </div>
-      </section>
-      <section class="imgPage section">
+      <section class="imgDetail section">
         <div class="center">
-          <div class="secTit">
-            <h1>Hubble Space Images</h1>
-            <p>
-              The Hubble Space Telescope (often referred to as HST or Hubble) is
-              a space telescope that was launched into low Earth orbit in 1990
-              and remains in operation. It was not the first space telescope but
-              it is one of the largest and most versatile, well known both as a
-              vital research tool and as a public relations boon for astronomy.
-            </p>
-          </div>
-          <div class="imgItems clear">
-            <!-- imgItem from imgApi.js -->
-            <!-- end of imgItem -->
-          </div>
-          <div class="btnBox">
-            <button type="button" class="btn loadMore">Load More</button>
+          <div class="secTit"></div>
+          <div class="imgDetailBox"></div>
+          <div class="detailBtns">
+            <a href="#" class="prev"
+              ><i class="fa fa-angle-left"></i><em>Preview</em>
+            </a>
+            <a href="images.html" class="viewLink">View All Images</a>
+            <a href="#" class="next"
+              ><em>Next</em> <i class="fa fa-angle-right"></i
+            ></a>
           </div>
         </div>
       </section>
@@ -87,7 +68,48 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?v=<?php echo time(); ?>"></script>
     <script src="js/subHeader.js"></script>
-    <script src="js/imgApi.js"></script>
     <script src="js/custom.js"></script>
+    <script>
+      $(document).ready(function () {
+        var locaNum = $(location).attr("href").split("=").reverse()[0];
+        var nLocaNum = Number(locaNum);
+        var titleCon = [];
+        var imgCon = [];
+        // console.log(nLocaNum);
+        function getImages(count) {
+          $.ajax({
+            url: "http://hubblesite.org/api/v3/image/" + count,
+            dataType: "jsonp",
+            success: function (data) {
+              titleCon = `<h1>${data.name}</h1>
+            <p>${data.description}</p>`;
+              imgCon = `<img src="http:${data.image_files[4].file_url}" alt="" />`;
+              $(".secTit").append(titleCon);
+              $(".imgDetailBox").append(imgCon);
+            },
+          });
+        }
+        if (nLocaNum === 48) {
+          $(".next").text("Visit Hubble Site");
+        }
+        $(".detailBtns a").click(function () {
+          if ($(this).hasClass("prev")) {
+            if (nLocaNum === 1) {
+              return false;
+            } else {
+              location.replace("imagesDetail.html?num=" + (nLocaNum - 1));
+            }
+          } else if ($(this).hasClass("next")) {
+            if (nLocaNum >= 48) {
+              $(".next").attr("href", "http://www.hubblesite.org");
+            } else {
+              location.replace("imagesDetail.html?num=" + (nLocaNum + 1));
+            }
+          }
+        });
+
+        getImages(nLocaNum);
+      });
+    </script>
   </body>
 </html>
