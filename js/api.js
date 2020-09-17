@@ -17,7 +17,9 @@ $(document).ready(function () {
           data.image_files[3].file_url +
           '" alt="" />' +
           "<span>" +
-          '<a href="#">View This Image</a>' +
+          '<a href="imagesDetail.html?num=' +
+          count +
+          '">View This Image</a>' +
           "</span>" +
           "</div>" +
           "</div>";
@@ -36,12 +38,12 @@ $(document).ready(function () {
       dataType: "jsonp",
       success: function (data) {
         vidItems =
-          '<video class="video" autoplay muted controls playsinline loop>' +
+          '<video class="video" muted autoplay controls playsinline loop>' +
           '<source src="http:' +
-          data.video_files[2].file_url +
+          data.video_files[0].file_url +
           '" type="video/mp4">' +
           '<source src="http:' +
-          data.video_files[2].file_url +
+          data.video_files[0].file_url +
           '" type="video/webm">' +
           "</video>";
         vidDesc =
@@ -56,7 +58,12 @@ $(document).ready(function () {
           "</h2>" +
           "<h2><b>Collection :</b> " +
           data.collection +
-          "</h1>";
+          "</h1>" +
+          '<div class="btnBox">' +
+          '<a href="videosDetail.html?num=' +
+          count +
+          '" class="btn">View This Video</a>' +
+          "</div>";
         $(".videoSec").append(vidItems);
         $(".decSec").prepend(vidDesc);
       },
@@ -85,7 +92,9 @@ $(document).ready(function () {
           "... </p>" +
           "</div>" +
           '<div class="btnBox">' +
-          ' <a href="" class="btn">View This Article</a>' +
+          ' <a href="' +
+          data[count].link +
+          '" class="btn" target="_blank">View This Article</a>' +
           "</div>" +
           "</div>" +
           "</div>";
